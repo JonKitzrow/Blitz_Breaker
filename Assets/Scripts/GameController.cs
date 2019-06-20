@@ -12,16 +12,18 @@ public class GameController : MonoBehaviour
     public float paddleRotationSpeed = 10;
     public float paddleRotationThreshold = 16;
     public float ballSpeed = 3f;
-    public Canvas gameOverUI, gameRunningUI;
+    public Canvas gameOverUI, gameRunningUI, tutorialUI;
     public Text scoreText, gameOverScore;
+    bool gameOverBool = false;
 
     // Start is called before the first frame update
     void Start()
     {
       screenToWorld = 17.8f / Screen.width; // conversion factor to go from screen to world coordinates
       ball.GetComponent<Rigidbody2D>().velocity = new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(0, 1f), 0) * ballSpeed;
-      gameRunningUI.enabled = true;
+      gameRunningUI.enabled = false;
       gameOverUI.enabled = false;
+      tutorialUI.enabled = true;
     }
 
     // Update is called once per frame
@@ -74,7 +76,6 @@ public class GameController : MonoBehaviour
       // check whether ball is out of bounds
       if (ball.position.y < -6f)
       {
-        Destroy(ball.gameObject);
         gameOver();
       }
 
@@ -88,15 +89,31 @@ public class GameController : MonoBehaviour
 
     public void gameOver()
     {
+      gameOverBool = true;
       gameOverScore.text = score.ToString();
       gameRunningUI.enabled = false;
       gameOverUI.enabled = true;
-      // StartCoroutine(nextSceneOnClick());
+      tutorialUI.enabled = false;
+      StartCoroutine(nextSceneOnClick());
+    }
+
+    public void hideTutorial()
+    {
+      if (tutorialUI.enabled)
+      {
+        gameRunningUI.enabled = true;
+        tutorialUI.enabled = false;
+      }
     }
 
     public void addScore(int addThis)
     {
       score += addThis;
+    }
+
+    public bool isGameOver()
+    {
+      return gameOverBool;
     }
 
     IEnumerator nextSceneOnClick()

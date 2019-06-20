@@ -42,6 +42,9 @@ public class BrickRow : MonoBehaviour
     public void removeBrick()
     {
       bricksLeft--;
-      gc.addScore(1);
+      if (!gc.isGameOver())
+      {
+        gc.addScore(1);  
+      }
     }
 }

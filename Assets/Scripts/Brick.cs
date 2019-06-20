@@ -20,6 +20,7 @@ public class Brick : MonoBehaviour
     {
       if (other.tag == "Ball")
       {
+        GameObject.Find("GameController").GetComponent<GameController>().hideTutorial();
         StartCoroutine(breakBrick());
       }
     }
